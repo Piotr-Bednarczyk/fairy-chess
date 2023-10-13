@@ -1,0 +1,35 @@
+// .chessboard {
+//     border: 1px solid #000;
+//     background-color: #eee;
+//     width: 400px;
+//     height: 400px;
+//   }
+  
+  .row {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .square {
+    width: 3em;
+    height: 3em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .square.dark {
+    background-color: #769656; /* Dark square color */
+    color: white;
+  }
+
+  .select{
+    background-color: #3861e7 !important; //kinda wacky .square.dark .select would probably work better, will work on this when adding custom boards
+  }
+
+  .circle {
+    width: 0.5em; /* Adjust the width to change the circle's size */
+    height: 0.5em; /* Adjust the height to change the circle's size */
+    background-color: rgb(255, 0, 0); /* Change the background color to your desired color */
+    border-radius: 50%; /* Makes the element a circle by setting border-radius to 50% */
+  }
