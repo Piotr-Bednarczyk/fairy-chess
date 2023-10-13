@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { piece,Color,PiecesTypes } from '../gameservice.service';
+import { piece,PiecesTypes, GameserviceService } from '../gameservice.service';
 
 
 @Component({
@@ -15,7 +15,6 @@ export class BoardComponent implements OnInit {
   gamestate: piece[][]=[];
   selected: number[] = [-1,-1]; //currently selected piece
   available:any[] = []; // tiles piece can move into
-  currentPlayer=Color.white;
 
 
 
@@ -37,14 +36,15 @@ export class BoardComponent implements OnInit {
   };
 
 
-  constructor() {
+  constructor(
+  ) {
     for (let i = 0; i < this.rows.length; i++) {
       this.gamestate[i] = new Array(this.columns.length);
     }
     // clear gamestate
     for (let i=0;i<8;i++)
       for (let j=0;j<8;j++){
-        this.gamestate[i][j]= new piece(Color.white,PiecesTypes.none)
+        this.gamestate[i][j]= new piece(true,PiecesTypes.none)
     }    
    }
 
@@ -56,37 +56,37 @@ export class BoardComponent implements OnInit {
   defaultSetup(){
     //place pawns
     for (let i=0;i<8;i++){
-      this.gamestate[1][i]=new piece(Color.black,PiecesTypes.pawn);
+      this.gamestate[1][i]=new piece(false,PiecesTypes.pawn);
     }
     for (let i=0;i<8;i++){
-      this.gamestate[6][i]=new piece(Color.white,PiecesTypes.pawn);
+      this.gamestate[6][i]=new piece(true,PiecesTypes.pawn);
     }
 
     //place white pieces
-    this.gamestate[7][0]=new piece(Color.white,PiecesTypes.rook);
-    this.gamestate[7][1]=new piece(Color.white,PiecesTypes.knight);
-    this.gamestate[7][2]=new piece(Color.white,PiecesTypes.bishop);
-    this.gamestate[7][3]=new piece(Color.white,PiecesTypes.queen);
-    this.gamestate[7][4]=new piece(Color.white,PiecesTypes.king);    
-    this.gamestate[7][5]=new piece(Color.white,PiecesTypes.bishop);
-    this.gamestate[7][6]=new piece(Color.white,PiecesTypes.knight);
-    this.gamestate[7][7]=new piece(Color.white,PiecesTypes.rook);
+    this.gamestate[7][0]=new piece(true,PiecesTypes.rook);
+    this.gamestate[7][1]=new piece(true,PiecesTypes.knight);
+    this.gamestate[7][2]=new piece(true,PiecesTypes.bishop);
+    this.gamestate[7][3]=new piece(true,PiecesTypes.queen);
+    this.gamestate[7][4]=new piece(true,PiecesTypes.king);    
+    this.gamestate[7][5]=new piece(true,PiecesTypes.bishop);
+    this.gamestate[7][6]=new piece(true,PiecesTypes.knight);
+    this.gamestate[7][7]=new piece(true,PiecesTypes.rook);
 
     //place dark pieces
-    this.gamestate[0][0]=new piece(Color.black,PiecesTypes.rook);
-    this.gamestate[0][1]=new piece(Color.black,PiecesTypes.knight);
-    this.gamestate[0][2]=new piece(Color.black,PiecesTypes.bishop);
-    this.gamestate[0][3]=new piece(Color.black,PiecesTypes.queen);
-    this.gamestate[0][4]=new piece(Color.black,PiecesTypes.king);    
-    this.gamestate[0][5]=new piece(Color.black,PiecesTypes.bishop);
-    this.gamestate[0][6]=new piece(Color.black,PiecesTypes.knight);
-    this.gamestate[0][7]=new piece(Color.black,PiecesTypes.rook);
+    this.gamestate[0][0]=new piece(false,PiecesTypes.rook);
+    this.gamestate[0][1]=new piece(false,PiecesTypes.knight);
+    this.gamestate[0][2]=new piece(false,PiecesTypes.bishop);
+    this.gamestate[0][3]=new piece(false,PiecesTypes.queen);
+    this.gamestate[0][4]=new piece(false,PiecesTypes.king);    
+    this.gamestate[0][5]=new piece(false,PiecesTypes.bishop);
+    this.gamestate[0][6]=new piece(false,PiecesTypes.knight);
+    this.gamestate[0][7]=new piece(false,PiecesTypes.rook);
   }
 
   selectTile(i:number,j:number){
     if (this.selected[0]==-1)
     {
-      if (this.gamestate[i][j].type!=PiecesTypes.none && this.gamestate[i][j].color==this.currentPlayer) {
+      if (this.gamestate[i][j].type!=PiecesTypes.none && this.gamestate[i][j].iswhite==GameserviceService.whiteMove) {
         this.selected[0]=i;
         this.selected[1]=j;
         this.highlightAvailable(i,j);
@@ -95,10 +95,9 @@ export class BoardComponent implements OnInit {
     else if(this.contains(this.available,[i,j])){ 
       let tech = this.gamestate[this.selected[0]][this.selected[1]]
       this.gamestate[i][j] = tech;
-      this.gamestate[this.selected[0]][this.selected[1]]=new piece(Color.white,PiecesTypes.none)
+      this.gamestate[this.selected[0]][this.selected[1]]=new piece(true,PiecesTypes.none)
       
-      if (this.currentPlayer==Color.white) this.currentPlayer=Color.black;
-      else if (this.currentPlayer==Color.black) this.currentPlayer=Color.white
+      GameserviceService.whiteMove=!GameserviceService.whiteMove;
       this.selected[0]=-1;
       this.selected[1]=-1;
       this.available=[];
@@ -111,13 +110,13 @@ export class BoardComponent implements OnInit {
   }
   
   highlightTile(i:number,j:number){
-    if (this.gamestate[i][j].color!=this.currentPlayer || this.gamestate[i][j].type==PiecesTypes.none)
+    if (this.gamestate[i][j].iswhite!=GameserviceService.whiteMove || this.gamestate[i][j].type==PiecesTypes.none)
     this.available.push([i,j])
   }
 
   highlightAvailable(i:number,j:number){
     if(this.gamestate[i][j].type==PiecesTypes.pawn){
-      if(this.gamestate[i][j].color==Color.white){  //White Pawns
+      if(this.gamestate[i][j].iswhite){  //White Pawns
         if(this.gamestate[i-1][j].type==PiecesTypes.none) //if nothing obstructs forward movement of pawn
         {
             this.highlightTile(i-1,j);
@@ -136,7 +135,7 @@ export class BoardComponent implements OnInit {
             this.highlightTile(i-1,j-1);   
       }    
 
-      if(this.gamestate[i][j].color==Color.black){  //Black Pawns
+      if(!this.gamestate[i][j].iswhite){  //Black Pawns
         if(this.gamestate[i+1][j].type==PiecesTypes.none) //if nothing obstructs forward movement of pawn
         {
             this.highlightTile(i+1,j);

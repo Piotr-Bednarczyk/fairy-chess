@@ -3,11 +3,11 @@
       <div class="square" *ngFor="let col of row; let j = index" [class.dark]="(i + j) % 2 !== 0" (click)="selectTile(i,j)"
       [ngClass]="selected[0]==i && selected[1]==j ? 'select' : ''" 
        >
-        <div *ngIf="gamestate[i][j].type!=6 && gamestate[i][j].color==1" >
-          <img  [src]="standard.white[gamestate[i][j].type]" alt="ni ma">
+        <div *ngIf="gamestate[i][j].type!=6 && gamestate[i][j].iswhite" >
+          <img  [src]="standard.white[gamestate[i][j].type]" alt="chess-piece">
         </div>
-        <div *ngIf="gamestate[i][j].type!=6 && gamestate[i][j].color==0">
-          <img  [src]="standard.black[gamestate[i][j].type]" alt="ni ma">
+        <div *ngIf="gamestate[i][j].type!=6 && !gamestate[i][j].iswhite">
+          <img  [src]="standard.black[gamestate[i][j].type]" alt="chess-piece">
         </div>
         <div class="circle" *ngIf="contains(available,[i,j])">
         </div>

@@ -5,17 +5,9 @@ import { Injectable } from '@angular/core';
 })
 export class GameserviceService {
 
-  static gamestate = "whiteMove";
-
-
+  public static whiteMove = true;
 
   constructor() { }
-}
-
-
-export enum Color {
-  black,
-  white
 }
 
  export enum PiecesTypes{
@@ -29,12 +21,12 @@ export enum Color {
 }
 
 export class piece{
-  public color: Color =Color.white;
+  public iswhite: boolean = true;
   public type: PiecesTypes = PiecesTypes.none;
 
-  constructor(color: Color,
+  constructor(iswhite: boolean,
     type: PiecesTypes,){
-      this.color=color;
+      this.iswhite=iswhite;
       this.type=type;
     }
   
