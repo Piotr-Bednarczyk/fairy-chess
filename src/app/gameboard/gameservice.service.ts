@@ -1,34 +1,32 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class GameserviceService {
-
   public static whiteMove = true;
+  public static moveHistory: any = [];
 
-  constructor() { }
+  constructor() {}
 }
 
- export enum PiecesTypes{
+export enum PiecesTypes {
   king,
   queen,
   bishop,
   knight,
   rook,
   pawn,
-  none
+  none,
 }
 
-export class piece{
+export class piece {
   public iswhite: boolean = true;
   public type: PiecesTypes = PiecesTypes.none;
 
-  constructor(iswhite: boolean,
-    type: PiecesTypes,){
-      this.iswhite=iswhite;
-      this.type=type;
-    }
-  
+  constructor(iswhite: boolean, type: PiecesTypes) {
+    this.iswhite = iswhite;
+    this.type = type;
+  }
 }
-

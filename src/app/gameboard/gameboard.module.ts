@@ -1,25 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BoardComponent } from './board/board.component';
-import {DragDropModule} from '@angular/cdk/drag-drop';
 import { MaingameComponent } from './maingame/maingame.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
-
-
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
-  declarations: [
-    BoardComponent,
-    MaingameComponent,
-    SidebarComponent
-  ],
-  imports: [
-    CommonModule,
-    DragDropModule
-  ],
-  exports:[
-    BoardComponent
-  ]
-
+  declarations: [BoardComponent, MaingameComponent, SidebarComponent],
+  imports: [CommonModule, MatButtonModule],
+  exports: [BoardComponent],
 })
-export class GameboardModule { }
+export class GameboardModule {}

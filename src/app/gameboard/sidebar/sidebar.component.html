@@ -1,11 +1,12 @@
-<p>sidebar works!</p>
-<div id="placeable-pieces">
-
-</div>
-<div id="Current player switch">
-
+<div class="some-kind-of-segment-that-will-be-reworked-later">
+  <div id="placeable-pieces"></div>
+  <div id="Current player switch"></div>
 </div>
 
-<div id="Reset position">
-
+<div class="some-kind-of-segment-that-will-be-reworked-later">
+  <div id="Reset position"></div>
+  <button mat-button color="primary" (click)="parseMovelist()">
+    Update Movelist
+  </button>
+  <div *ngFor="let move of movelist">{{ move }}</div>
 </div>

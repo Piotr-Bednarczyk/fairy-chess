@@ -93,7 +93,9 @@ export class BoardComponent implements OnInit {
       }
     }
     else if(this.contains(this.available,[i,j])){ 
+      
       let tech = this.gamestate[this.selected[0]][this.selected[1]]
+      GameserviceService.moveHistory.push([[this.selected[0],this.selected[1],this.gamestate[this.selected[0]][this.selected[1]].type],[i,j]]);
       this.gamestate[i][j] = tech;
       this.gamestate[this.selected[0]][this.selected[1]]=new piece(true,PiecesTypes.none)
       
