@@ -20,68 +20,31 @@ export class BoardComponent implements OnInit {
       'assets/chesspieces/Chess_blt45.svg', // bishop
       'assets/chesspieces/Chess_nlt45.svg', // knight
       'assets/chesspieces/Chess_rlt45.svg', // rook
-      'assets/chesspieces/Chess_plt45.svg',
-    ], // pawn
+      'assets/chesspieces/Chess_plt45.svg', // pawn
+    ],
     black: [
       'assets/chesspieces/Chess_kdt45.svg', // king
       'assets/chesspieces/Chess_qdt45.svg', // queen
       'assets/chesspieces/Chess_bdt45.svg', // bishop
       'assets/chesspieces/Chess_ndt45.svg', // knight
       'assets/chesspieces/Chess_rdt45.svg', // rook
-      'assets/chesspieces/Chess_pdt45.svg',
-    ], // pawn
+      'assets/chesspieces/Chess_pdt45.svg', // pawn
+    ],
   };
 
-  constructor() {
-    for (let i = 0; i < this.rows.length; i++) {
-      this.gamestate[i] = new Array(this.columns.length);
-    }
-    // clear gamestate
-    for (let i = 0; i < 8; i++)
-      for (let j = 0; j < 8; j++) {
-        this.gamestate[i][j] = new piece(true, PiecesTypes.none);
-      }
+  constructor(private gameService: GameserviceService) {
+    this.gameService.defaultSetup();
   }
 
   ngOnInit(): void {
-    this.defaultSetup();
-  }
-
-  defaultSetup() {
-    //place pawns
-    for (let i = 0; i < 8; i++) {
-      this.gamestate[1][i] = new piece(false, PiecesTypes.pawn);
-    }
-    for (let i = 0; i < 8; i++) {
-      this.gamestate[6][i] = new piece(true, PiecesTypes.pawn);
-    }
-
-    //place white pieces
-    this.gamestate[7][0] = new piece(true, PiecesTypes.rook);
-    this.gamestate[7][1] = new piece(true, PiecesTypes.knight);
-    this.gamestate[7][2] = new piece(true, PiecesTypes.bishop);
-    this.gamestate[7][3] = new piece(true, PiecesTypes.queen);
-    this.gamestate[7][4] = new piece(true, PiecesTypes.king);
-    this.gamestate[7][5] = new piece(true, PiecesTypes.bishop);
-    this.gamestate[7][6] = new piece(true, PiecesTypes.knight);
-    this.gamestate[7][7] = new piece(true, PiecesTypes.rook);
-
-    //place dark pieces
-    this.gamestate[0][0] = new piece(false, PiecesTypes.rook);
-    this.gamestate[0][1] = new piece(false, PiecesTypes.knight);
-    this.gamestate[0][2] = new piece(false, PiecesTypes.bishop);
-    this.gamestate[0][3] = new piece(false, PiecesTypes.queen);
-    this.gamestate[0][4] = new piece(false, PiecesTypes.king);
-    this.gamestate[0][5] = new piece(false, PiecesTypes.bishop);
-    this.gamestate[0][6] = new piece(false, PiecesTypes.knight);
-    this.gamestate[0][7] = new piece(false, PiecesTypes.rook);
+    this.gamestate = this.gameService.gamestate;
   }
 
   selectTile(i: number, j: number) {
     if (this.selected[0] == -1) {
       if (
         this.gamestate[i][j].type != PiecesTypes.none &&
-        this.gamestate[i][j].iswhite == GameserviceService.whiteMove
+        this.gamestate[i][j].iswhite == this.gameService.whiteMove
       ) {
         this.selected[0] = i;
         this.selected[1] = j;
@@ -89,7 +52,7 @@ export class BoardComponent implements OnInit {
       }
     } else if (this.contains(this.available, [i, j])) {
       let tech = this.gamestate[this.selected[0]][this.selected[1]];
-      GameserviceService.moveHistory.push([
+      this.gameService.moveHistory.push([
         [
           this.selected[0],
           this.selected[1],
@@ -103,7 +66,7 @@ export class BoardComponent implements OnInit {
         PiecesTypes.none
       );
 
-      GameserviceService.whiteMove = !GameserviceService.whiteMove;
+      this.gameService.whiteMove = !this.gameService.whiteMove;
       this.selected[0] = -1;
       this.selected[1] = -1;
       this.available = [];
@@ -116,7 +79,7 @@ export class BoardComponent implements OnInit {
 
   highlightTile(i: number, j: number) {
     if (
-      this.gamestate[i][j].iswhite != GameserviceService.whiteMove ||
+      this.gamestate[i][j].iswhite != this.gameService.whiteMove ||
       this.gamestate[i][j].type == PiecesTypes.none
     )
       this.available.push([i, j]);

@@ -9,7 +9,7 @@ import { GameserviceService, PiecesTypes } from '../gameservice.service';
 export class SidebarComponent implements OnInit {
   movelist: any;
 
-  constructor() {}
+  constructor(private gameService: GameserviceService) {}
 
   ngOnInit(): void {
     this.parseMovelist();
@@ -18,7 +18,7 @@ export class SidebarComponent implements OnInit {
   //Piecetype can be worked into this making it into a proper chessnotation. However I don't think that proper chessnotation will work out in grander scope.
   parseMovelist() {
     this.movelist = [];
-    for (let item of GameserviceService.moveHistory) {
+    for (let item of this.gameService.moveHistory) {
       this.movelist.push(
         String.fromCharCode(item[0][1] + 65) +
           (8 - item[0][0]).toString() +
